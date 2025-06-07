@@ -100,7 +100,7 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
 ## rename app
-# dart run rename_app:main all="Sound meter"
+# dart run rename_app:main all="Speedometer"
 
 ## change icons
 # dart run flutter_launcher_icons -f pubspec.yaml
