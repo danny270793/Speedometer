@@ -2,15 +2,15 @@
 
 Flutter app that measures how fast is moving the phone
 
-![Download github repo](https://github.com/danny270793/Speedometer/blob/master/playstore/images/001-main-light.png)
+![Download github repo](https://github.com/danny270793/Speedometer/blob/main/playstore/images/001-main-light.png)
 
 It also have a dark mode and allows to ask for biometrics before go in the app
 
-![Download github repo](https://github.com/danny270793/Speedometer/blob/master/playstore/images/002-settings-light.png)
+![Download github repo](https://github.com/danny270793/Speedometer/blob/main/playstore/images/002-settings-light.png)
 
 The dark mode
 
-![Download github repo](https://github.com/danny270793/Speedometer/blob/master/playstore/images/003-main-dark.png)
+![Download github repo](https://github.com/danny270793/Speedometer/blob/main/playstore/images/003-main-dark.png)
 
 ## Downloads
 
