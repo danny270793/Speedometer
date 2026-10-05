@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 
-import 'location_source.dart';
+import '../../data/datasources/location_source.dart';
 import 'speedometer_state.dart';
 
 class SpeedometerCubit extends Cubit<SpeedometerState> {

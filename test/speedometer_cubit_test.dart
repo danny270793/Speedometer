@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:speedometer/core/units/app_units_controller.dart';
-import 'package:speedometer/features/speedometer/location_source.dart';
-import 'package:speedometer/features/speedometer/speedometer_cubit.dart';
-import 'package:speedometer/features/speedometer/speedometer_state.dart';
+import 'package:speedometer/features/speedometer/data/datasources/location_source.dart';
+import 'package:speedometer/features/speedometer/presentation/cubit/speedometer_cubit.dart';
+import 'package:speedometer/features/speedometer/presentation/cubit/speedometer_state.dart';
 
 class _FakeLocationSource implements LocationSource {
   _FakeLocationSource({

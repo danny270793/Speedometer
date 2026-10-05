@@ -6,8 +6,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../core/di/injection.dart';
 import '../core/units/app_units_controller.dart';
-import '../features/speedometer/speedometer_cubit.dart';
-import '../features/speedometer/speedometer_state.dart';
+import '../features/speedometer/presentation/cubit/speedometer_cubit.dart';
+import '../features/speedometer/presentation/cubit/speedometer_state.dart';
 import '../widgets/speed_gauge.dart';
 
 class HomePage extends StatelessWidget {

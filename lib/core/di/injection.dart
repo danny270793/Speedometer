@@ -1,10 +1,11 @@
 import 'package:get_it/get_it.dart';
+
 import '../locale/app_locale_controller.dart';
 import '../security/app_biometric_unlock_controller.dart';
 import '../theme/app_theme_controller.dart';
 import '../units/app_units_controller.dart';
-import '../../features/speedometer/location_source.dart';
-import '../../features/speedometer/speedometer_cubit.dart';
+import '../../features/speedometer/data/datasources/location_source.dart';
+import '../../features/speedometer/presentation/cubit/speedometer_cubit.dart';
 
 final getIt = GetIt.instance;
 
