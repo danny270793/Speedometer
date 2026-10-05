@@ -33,7 +33,7 @@ flutter run
 
 ## Downloads
 
-Found it on [Google Play](https://play.google.com/store/apps/details?id=io.github.danny270793.sppedometer)
+Found it on [Google Play](https://play.google.com/store/apps/details?id=io.github.danny270793.speedometer)
 
 ## Follow me
 

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:speedometer/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../core/di/injection.dart';
 import '../core/locale/app_locale_controller.dart';
 import '../core/security/app_biometric_unlock_controller.dart';
@@ -13,7 +14,7 @@ import '../core/units/app_units_controller.dart';
 import '../widgets/bottom_sheet_pinned_title.dart';
 
 const _playStoreUrl =
-    'https://play.google.com/store/apps/details?id=io.github.danny270793.sppedometer';
+    'https://play.google.com/store/apps/details?id=io.github.danny270793.speedometer';
 
 String _languageOptionLabel(AppLocalizations l10n, AppLanguagePreference p) =>
     switch (p) {
@@ -94,10 +95,13 @@ Future<void> _setBiometricUnlockEnabled(
     }
     return;
   }
-  final ok = await ctrl.localAuth.authenticate(
-    localizedReason: l10n.settingsBiometricAuthReason,
-    options: const AuthenticationOptions(biometricOnly: true, stickyAuth: true),
-  );
+  final ok = await ctrl.localAuth
+      .authenticate(
+        localizedReason: l10n.settingsBiometricAuthReason,
+        biometricOnly: true,
+        persistAcrossBackgrounding: true,
+      )
+      .catchError((Object _) => false, test: (e) => e is LocalAuthException);
   if (!context.mounted) {
     return;
   }
@@ -137,23 +141,31 @@ class _SettingsPageState extends State<SettingsPage> {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
           children: [
-            _SectionHeader(l10n.settingsMeasurementSection),
+            _SectionHeader(l10n.settingsSecuritySection),
             ListenableBuilder(
-              listenable: getIt<AppUnitsController>(),
+              listenable: getIt<AppBiometricUnlockController>(),
               builder: (context, _) {
-                final ctrl = getIt<AppUnitsController>();
-                return _NavigationTile(
-                  icon: Icons.speed_rounded,
-                  title: l10n.settingsSpeedUnit,
-                  subtitle: _unitsOptionLabel(l10n, ctrl.preference),
-                  onTap: () => _showOptionPickerSheet(
-                    context,
-                    title: l10n.settingsSpeedUnit,
-                    options: AppUnitsPreference.values,
-                    selected: ctrl.preference,
-                    label: (p) => _unitsOptionLabel(l10n, p),
-                    onSelected: ctrl.setPreference,
+                final bio = getIt<AppBiometricUnlockController>();
+                return SwitchListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                  secondary: Icon(
+                    Icons.fingerprint_rounded,
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
+                  title: Text(l10n.settingsBiometricUnlockTitle),
+                  subtitle: Text(
+                    bio.authenticatorAvailable
+                        ? l10n.settingsBiometricUnlockSubtitle
+                        : l10n.settingsBiometricUnavailable,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                      height: 1.35,
+                    ),
+                  ),
+                  value: bio.enabled,
+                  onChanged: bio.authenticatorAvailable
+                      ? (v) => _setBiometricUnlockEnabled(context, l10n, bio, v)
+                      : null,
                 );
               },
             ),
@@ -198,31 +210,23 @@ class _SettingsPageState extends State<SettingsPage> {
               },
             ),
             const _SectionDivider(),
-            _SectionHeader(l10n.settingsSecuritySection),
+            _SectionHeader(l10n.settingsMeasurementSection),
             ListenableBuilder(
-              listenable: getIt<AppBiometricUnlockController>(),
+              listenable: getIt<AppUnitsController>(),
               builder: (context, _) {
-                final bio = getIt<AppBiometricUnlockController>();
-                return SwitchListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-                  secondary: Icon(
-                    Icons.fingerprint_rounded,
-                    color: theme.colorScheme.onSurfaceVariant,
+                final ctrl = getIt<AppUnitsController>();
+                return _NavigationTile(
+                  icon: Icons.speed_rounded,
+                  title: l10n.settingsSpeedUnit,
+                  subtitle: _unitsOptionLabel(l10n, ctrl.preference),
+                  onTap: () => _showOptionPickerSheet(
+                    context,
+                    title: l10n.settingsSpeedUnit,
+                    options: AppUnitsPreference.values,
+                    selected: ctrl.preference,
+                    label: (p) => _unitsOptionLabel(l10n, p),
+                    onSelected: ctrl.setPreference,
                   ),
-                  title: Text(l10n.settingsBiometricUnlockTitle),
-                  subtitle: Text(
-                    bio.authenticatorAvailable
-                        ? l10n.settingsBiometricUnlockSubtitle
-                        : l10n.settingsBiometricUnavailable,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                      height: 1.35,
-                    ),
-                  ),
-                  value: bio.enabled,
-                  onChanged: bio.authenticatorAvailable
-                      ? (v) => _setBiometricUnlockEnabled(context, l10n, bio, v)
-                      : null,
                 );
               },
             ),
