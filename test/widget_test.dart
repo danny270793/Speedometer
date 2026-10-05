@@ -1,30 +1,59 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:speedometer/l10n/app_localizations.dart';
+import 'package:speedometer/pages/settings_page.dart';
+import 'package:speedometer/core/di/injection.dart';
+import 'package:speedometer/widgets/speed_gauge.dart';
 
-import 'package:speedometer/main.dart';
+Widget _host(Widget child, {Locale locale = const Locale('en')}) => MaterialApp(
+  locale: locale,
+  localizationsDelegates: AppLocalizations.localizationsDelegates,
+  supportedLocales: AppLocalizations.supportedLocales,
+  home: child,
+);
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  setUpAll(() {
+    SharedPreferences.setMockInitialValues({});
+    setupDi();
+  });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  testWidgets('gauge renders current speed and unit', (tester) async {
+    await tester.pumpWidget(
+      _host(
+        const Scaffold(
+          body: SpeedGauge(
+            speed: 87.4,
+            topSpeed: 110,
+            maximum: 200,
+            unitLabel: 'km/h',
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('87'), findsOneWidget);
+    expect(find.text('km/h'), findsOneWidget);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  testWidgets('settings shows units, appearance, security and about', (
+    tester,
+  ) async {
+    await tester.pumpWidget(_host(const SettingsPage()));
+    await tester.pumpAndSettle();
+    expect(find.text('Units'), findsOneWidget);
+    expect(find.text('Language'), findsOneWidget);
+    expect(find.text('Theme'), findsOneWidget);
+    expect(find.text('Face ID & fingerprint'), findsOneWidget);
+  });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  testWidgets('settings is translated to Spanish', (tester) async {
+    await tester.pumpWidget(
+      _host(const SettingsPage(), locale: const Locale('es')),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Ajustes'), findsOneWidget);
+    expect(find.text('Idioma'), findsOneWidget);
   });
 }
