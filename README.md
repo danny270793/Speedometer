@@ -12,6 +12,25 @@ The dark mode
 
 ![Download github repo](https://github.com/danny270793/Speedometer/blob/main/playstore/images/003-main-dark.png)
 
+## Features
+
+- Animated speed gauge with a top-speed marker
+- Trip stats: top speed, average speed, distance and altitude
+- Metric (km/h) or imperial (mph) units
+- English and Spanish, light / dark / system theme
+- Optional Face ID / fingerprint unlock
+
+## Development
+
+Flutter version is pinned in `.tool-versions` (same as Wallet):
+
+```bash
+asdf install
+flutter pub get
+flutter test
+flutter run
+```
+
 ## Downloads
 
 Found it on [Google Play](https://play.google.com/store/apps/details?id=io.github.danny270793.sppedometer)
@@ -28,6 +47,6 @@ Licensed under the [MIT](license.md) License
 
 ## Version
 
-Speedometer version 1.0.0
+Speedometer version 1.1.0
 
-Last update 07/06/2025
+Last update 04/10/2026
